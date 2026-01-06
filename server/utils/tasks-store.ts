@@ -1,7 +1,7 @@
-import { promises as fs } from 'node:fs';
-import { join } from 'node:path';
+import { promises as fs } from "node:fs";
+import { join } from "node:path";
 
-export type TaskStatus = 'todo' | 'in-progress' | 'done';
+export type TaskStatus = "todo" | "in-progress" | "done";
 
 export type Task = {
   id: number;
@@ -9,13 +9,13 @@ export type Task = {
   status: TaskStatus;
 };
 
-const DATA_DIR = join(process.cwd(), 'server', 'data');
-const TASKS_FILE = join(DATA_DIR, 'tasks.json');
+const DATA_DIR = join(process.cwd(), "server", "data");
+const TASKS_FILE = join(DATA_DIR, "tasks.json");
 
 const SEED_TASKS: Task[] = [
-  { id: 1, title: 'Prepare release', status: 'done' },
-  { id: 2, title: 'Fix login bug', status: 'in-progress' },
-  { id: 3, title: 'Write API docs', status: 'todo' },
+  { id: 1, title: "Prepare release", status: "done" },
+  { id: 2, title: "Fix login bug", status: "in-progress" },
+  { id: 3, title: "Write API docs", status: "todo" },
 ];
 
 async function ensureDataFile() {
@@ -23,18 +23,18 @@ async function ensureDataFile() {
     await fs.mkdir(DATA_DIR, { recursive: true });
     await fs.access(TASKS_FILE);
   } catch {
-    await fs.writeFile(TASKS_FILE, JSON.stringify(SEED_TASKS, null, 2), 'utf8');
+    await fs.writeFile(TASKS_FILE, JSON.stringify(SEED_TASKS, null, 2), "utf8");
   }
 }
 
 async function readTasks(): Promise<Task[]> {
   await ensureDataFile();
-  const raw = await fs.readFile(TASKS_FILE, 'utf8');
+  const raw = await fs.readFile(TASKS_FILE, "utf8");
   return JSON.parse(raw) as Task[];
 }
 
 async function writeTasks(tasks: Task[]): Promise<void> {
-  await fs.writeFile(TASKS_FILE, JSON.stringify(tasks, null, 2), 'utf8');
+  await fs.writeFile(TASKS_FILE, JSON.stringify(tasks, null, 2), "utf8");
 }
 
 export async function getTasks(): Promise<Task[]> {
@@ -48,7 +48,7 @@ export async function getTaskById(id: number): Promise<Task | undefined> {
 
 export async function updateTask(
   id: number,
-  patch: Partial<Pick<Task, 'title' | 'status'>>,
+  patch: Partial<Pick<Task, "title" | "status">>
 ): Promise<Task | undefined> {
   const tasks = await readTasks();
   const index = tasks.findIndex((t) => t.id === id);

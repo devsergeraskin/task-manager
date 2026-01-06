@@ -29,24 +29,27 @@ pnpm i
 ```
 
 and then run
+
 ```shell
 pnpm run dev
 ```
 
 ### Project Overview
+
 The project dependencies and Nuxt configuration already include `Pinia` and `Tailwind`.
 
 You may structure the project however you prefer, but keep the code clean and readable.
 Please use `Tailwind` for styling, and design the entire UI according to your best judgement.
 You don't need to match any specific design; a simple, clean UI is perfectly fine.
 
-
 ### Feature A: Fetch + Filter + Loading State
-To simulate communication with backend, use a server route in `server/api/tasks.get.ts` that retrieves the list of tasks from a JSON-backed mock datastore defined in `server/utils/tasks-store.ts`. 
+
+To simulate communication with backend, use a server route in `server/api/tasks.get.ts` that retrieves the list of tasks from a JSON-backed mock datastore defined in `server/utils/tasks-store.ts`.
 
 Your goal is to implement the `/tasks` page that displays the list of tasks.
 
 Requirements:
+
 - Fetch data using `useAsyncData`
 - Allow filtering tasks by status
 - Display a loading state while data is being fetched
@@ -54,14 +57,17 @@ Requirements:
 - Implement task-related logic in a way that can be reused elsewhere
 
 ### Feature B: Detail Page + Route Param Validation
+
 Implement the `/tasks/[id]` page that displays a single task. Use the server route in `server/api/tasks/[id].get.ts` to retrieve the given task by id.
 
 Requirements:
+
 - Load the task by ID
 - If the task does not exist → redirect to `/404`
 - Use Nuxt middleware to validate the ID or handle invalid/not-found states
 
 ### Feature C: Simple Form + Error Handling
+
 To continue the existing task detail page, add the functionality to update an existing task. Use the server route in `server/api/tasks/[id].put.ts` to update it.
 
 On the task detail page, extend the UI:
@@ -89,6 +95,7 @@ the problem, structure your code, and make technical decisions without being exp
 instructed at every step.
 
 This means we value:
+
 - **Clean, readable code** that another developer could immediately follow
 - **Consistent structure and naming**, even in a small demo project
 - **Separation of concerns** - UI, data fetching, and business logic should not be mixed unnecessarily

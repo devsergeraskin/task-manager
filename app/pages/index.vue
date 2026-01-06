@@ -1,9 +1,9 @@
 <template>
-  <div />
+  <LandingHero />
 </template>
 
 <script setup lang="ts">
 definePageMeta({
-  middleware: ["redirect-to-tasks"],
+  // middleware: ["redirect-to-tasks"], // Removed redirect
 });
 </script>
