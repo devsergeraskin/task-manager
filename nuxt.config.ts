@@ -4,4 +4,8 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ["~/assets/scss/main.scss"],
   modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt", "@nuxt/eslint"],
+  tailwindcss: {
+    exposeConfig: true,
+    viewer: true,
+  },
 });

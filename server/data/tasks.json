@@ -2,14 +2,14 @@
   {
     "id": 1,
     "title": "test111",
-    "description": "11111ddddccdf",
-    "status": "in-progress"
+    "description": "test est ",
+    "status": "done"
   },
   {
     "id": 2,
     "title": "Fix login bug",
     "description": "Investigate why login fails on Safari.",
-    "status": "in-progress"
+    "status": "done"
   },
   {
     "id": 3,

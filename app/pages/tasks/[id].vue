@@ -1,19 +1,19 @@
 <template>
   <div class="min-h-screen bg-gray-50 py-8">
     <div class="container mx-auto px-4 max-w-2xl">
-      <!-- Back Link -->
+      <!-- Back Link (styled like the new UI) -->
       <NuxtLink
         to="/tasks"
-        class="inline-flex items-center text-gray-600 hover:text-indigo-600 mb-6 transition-colors font-medium"
+        class="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-white hover:text-indigo-700 transition ring-1 ring-transparent hover:ring-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40 mb-6"
       >
-        <Icon icon="ph:arrow-left" class="mr-2" />
+        <Icon icon="ph:arrow-left" width="18" height="18" />
         Back to Tasks
       </NuxtLink>
 
       <!-- Loading State -->
       <div
         v-if="status === 'pending'"
-        class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 flex justify-center"
+        class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 flex justify-center"
       >
         <LoadingSpinner />
       </div>
@@ -21,22 +21,23 @@
       <!-- Error State -->
       <div
         v-else-if="error"
-        class="bg-red-50 text-red-600 p-8 rounded-xl text-center border border-red-100"
+        class="bg-red-50 text-red-700 p-8 rounded-2xl text-center ring-1 ring-red-200"
       >
         <Icon
           icon="ph:warning-octagon"
-          width="48"
-          height="48"
+          width="44"
+          height="44"
           class="mx-auto mb-4 opacity-80"
         />
         <h2 class="text-xl font-bold mb-2">Task Not Found</h2>
-        <p class="mb-6 opacity-90">
+        <p class="mb-6 text-sm text-red-700/90">
           The task you are looking for does not exist or an error occurred.
         </p>
         <NuxtLink
           to="/tasks"
-          class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium inline-block"
+          class="inline-flex items-center gap-2 rounded-xl bg-red-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500/40"
         >
+          <Icon icon="ph:arrow-left" width="18" height="18" />
           Return to List
         </NuxtLink>
       </div>
@@ -44,68 +45,82 @@
       <!-- Content -->
       <div
         v-else-if="task"
-        class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+        class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden"
       >
-        <div class="p-8">
-          <div class="flex justify-between items-start mb-6">
-            <span class="text-sm font-mono text-gray-400">#{{ task.id }}</span>
+        <!-- Top accent (matches TaskCard) -->
+        <div :class="accentClasses" class="h-1 w-full" />
+
+        <div class="p-6 sm:p-8">
+          <div class="flex justify-between items-start mb-6 gap-4">
+            <div class="flex items-center gap-2 text-xs text-gray-500">
+              <span class="font-mono text-gray-400">#{{ task.id }}</span>
+            </div>
+
+            <!-- Status badge -->
             <span
-              :class="[
-                'px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide flex items-center gap-1.5',
-                statusClasses,
-              ]"
+              :class="statusClasses"
+              class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ring-1 ring-inset"
             >
+              <span :class="dotClasses" class="h-1.5 w-1.5 rounded-full" />
               <Icon :icon="statusIcon" width="14" height="14" />
               {{ task.status.replace("-", " ") }}
             </span>
           </div>
 
-          <div v-if="isEditing" class="mb-6 space-y-4">
+          <!-- Edit mode -->
+          <div v-if="isEditing" class="space-y-5">
             <div>
               <label
                 for="title"
-                class="block text-sm font-medium text-gray-700 mb-1"
-                >Title</label
+                class="block text-sm font-semibold text-gray-700 mb-1"
               >
+                Title
+              </label>
               <input
                 id="title"
                 v-model="editedTitle"
                 type="text"
-                class="w-full text-xl font-bold text-gray-900 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50"
+                class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base sm:text-lg font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-300"
                 placeholder="Enter task title"
                 ref="titleInput"
               />
             </div>
 
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Status</label
-            >
-            <TaskStatusDropdown
-              :current-status="editedStatus"
-              :show-label="true"
-              @update="(s) => (editedStatus = s)"
-            />
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1">
+                Status
+              </label>
+              <TaskStatusDropdown
+                :current-status="editedStatus"
+                :show-label="true"
+                @update="(s) => (editedStatus = s)"
+              />
+            </div>
 
             <div>
               <label
                 for="description"
-                class="block text-sm font-medium text-gray-700 mb-1"
-                >Description</label
+                class="block text-sm font-semibold text-gray-700 mb-1"
               >
+                Description
+              </label>
               <textarea
                 id="description"
                 v-model="editedDescription"
-                rows="4"
-                class="w-full text-base text-gray-600 border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50"
+                rows="5"
+                class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm sm:text-base text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-300"
                 placeholder="Add a detailed description..."
-              ></textarea>
+              />
             </div>
           </div>
+
+          <!-- View mode -->
           <template v-else>
-            <h1 class="text-3xl font-bold text-gray-900 mb-6">
+            <h1 class="text-3xl font-bold text-gray-900 mb-4">
               {{ task.title }}
             </h1>
-            <div class="prose prose-indigo max-w-none text-gray-600">
+
+            <div class="prose prose-indigo max-w-none text-gray-700">
               <p v-if="task.description">{{ task.description }}</p>
               <p v-else class="text-gray-400 italic">
                 No description provided.
@@ -114,20 +129,22 @@
           </template>
         </div>
 
+        <!-- Footer actions (match new button styles) -->
         <div
-          class="bg-gray-50 px-8 py-4 border-t border-gray-100 flex justify-end gap-3"
+          class="bg-gray-50 px-6 sm:px-8 py-4 border-t border-gray-200 flex justify-end gap-3"
         >
           <template v-if="isEditing">
             <button
               @click="cancelEditing"
-              class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium text-sm"
+              class="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 ring-1 ring-gray-200 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
               :disabled="isSaving"
             >
               Cancel
             </button>
+
             <button
               @click="saveTask"
-              class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium text-sm flex items-center gap-2"
+              class="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 active:bg-indigo-800 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40 disabled:opacity-60 disabled:cursor-not-allowed"
               :disabled="isSaving"
             >
               <Icon icon="ph:spinner" class="animate-spin" v-if="isSaving" />
@@ -135,10 +152,11 @@
               {{ isSaving ? "Saving..." : "Save Changes" }}
             </button>
           </template>
+
           <button
             v-else
             @click="startEditing"
-            class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium text-sm flex items-center gap-2"
+            class="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 active:bg-indigo-800 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
           >
             <Icon icon="ph:pencil-simple" />
             Edit Task
@@ -162,7 +180,6 @@ const route = useRoute();
 const store = useTasksStore();
 const taskId = Number(route.params.id);
 
-// Use useAsyncData to fetch task details
 const {
   data: task,
   status,
@@ -183,9 +200,7 @@ const startEditing = () => {
     editedDescription.value = task.value.description || "";
     editedStatus.value = task.value.status;
     isEditing.value = true;
-    nextTick(() => {
-      titleInput.value?.focus();
-    });
+    nextTick(() => titleInput.value?.focus());
   }
 };
 
@@ -215,22 +230,51 @@ const saveTask = async () => {
   }
 };
 
+/** Badge + accent + dot (same palette as TaskCard) */
 const statusClasses = computed(() => {
-  if (!task.value) return "";
+  if (!task.value) return "bg-gray-50 text-gray-700 ring-gray-200";
   switch (task.value.status) {
     case "done":
-      return "bg-green-100 text-green-700";
+      return "bg-emerald-50 text-emerald-700 ring-emerald-200";
     case "in-progress":
-      return "bg-blue-100 text-blue-700";
+      return "bg-blue-50 text-blue-700 ring-blue-200";
     case "todo":
-      return "bg-gray-100 text-gray-700";
+      return "bg-gray-50 text-gray-700 ring-gray-200";
     default:
-      return "bg-gray-100 text-gray-700";
+      return "bg-gray-50 text-gray-700 ring-gray-200";
+  }
+});
+
+const dotClasses = computed(() => {
+  if (!task.value) return "bg-gray-400";
+  switch (task.value.status) {
+    case "done":
+      return "bg-emerald-500";
+    case "in-progress":
+      return "bg-blue-500";
+    case "todo":
+      return "bg-gray-400";
+    default:
+      return "bg-gray-400";
+  }
+});
+
+const accentClasses = computed(() => {
+  if (!task.value) return "bg-gray-300";
+  switch (task.value.status) {
+    case "done":
+      return "bg-emerald-500/70";
+    case "in-progress":
+      return "bg-blue-500/70";
+    case "todo":
+      return "bg-gray-300";
+    default:
+      return "bg-gray-300";
   }
 });
 
 const statusIcon = computed(() => {
-  if (!task.value) return "";
+  if (!task.value) return "ph:circle";
   switch (task.value.status) {
     case "done":
       return "ph:check-circle";
