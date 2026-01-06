@@ -3,7 +3,9 @@
     <div class="bg-gray-50 py-8">
       <div class="container mx-auto px-4 max-w-4xl">
         <!-- Header -->
-        <header class="mb-6 flex items-start justify-between gap-4">
+        <header
+          class="mb-6 flex flex-col sm:flex-row sm:items-start justify-between gap-4"
+        >
           <div class="flex items-center gap-3">
             <div
               class="p-3 bg-indigo-50 rounded-2xl text-indigo-600 ring-1 ring-indigo-100"
@@ -20,14 +22,47 @@
             </div>
           </div>
 
-          <!-- Quick action: Open Modal -->
-          <button
-            @click="isCreateModalOpen = true"
-            class="hidden sm:inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
-          >
-            <Icon icon="ph:plus" width="18" height="18" />
-            New Task
-          </button>
+          <div class="flex items-center gap-3">
+            <!-- View Toggle -->
+            <div
+              class="hidden sm:inline-flex bg-white p-1 rounded-xl shadow-sm border border-gray-200"
+            >
+              <button
+                @click="viewMode = 'grid'"
+                :class="[
+                  'p-2 rounded-lg transition-colors',
+                  viewMode === 'grid'
+                    ? 'bg-indigo-50 text-indigo-600'
+                    : 'text-gray-400 hover:text-gray-600',
+                ]"
+                title="Grid View"
+              >
+                <Icon icon="ph:squares-four" width="20" height="20" />
+              </button>
+              <button
+                @click="viewMode = 'table'"
+                :class="[
+                  'p-2 rounded-lg transition-colors',
+                  viewMode === 'table'
+                    ? 'bg-indigo-50 text-indigo-600'
+                    : 'text-gray-400 hover:text-gray-600',
+                ]"
+                title="Table View"
+              >
+                <Icon icon="ph:list-dashes" width="20" height="20" />
+              </button>
+            </div>
+
+            <!-- Open Modal -->
+            <button
+              @click="isCreateModalOpen = true"
+              class="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
+            >
+              <Icon icon="ph:plus" width="18" height="18" />
+              <span class="hidden sm:inline">New Task</span>
+              <span class="sm:hidden">New</span>
+            </button>
+          </div>
         </header>
 
         <!-- Filters (segmented control) -->
@@ -161,15 +196,18 @@
           style="max-height: calc(100vh - 400px)"
           v-else
         >
-          <div
-            v-if="store.filteredTasks.length > 0"
-            class="grid gap-4 md:grid-cols-2"
-          >
-            <TaskCard
-              v-for="task in store.filteredTasks"
-              :key="task.id"
-              :task="task"
-            />
+          <div v-if="store.filteredTasks.length > 0">
+            <!-- Grid View -->
+            <div v-if="viewMode === 'grid'" class="grid gap-4 md:grid-cols-2">
+              <TaskCard
+                v-for="task in store.filteredTasks"
+                :key="task.id"
+                :task="task"
+              />
+            </div>
+
+            <!-- Table View -->
+            <TaskTable v-else :tasks="store.filteredTasks" />
           </div>
 
           <!-- Empty -->
@@ -220,6 +258,7 @@ import { Icon } from "@iconify/vue";
 
 const store = useTasksStore();
 const isCreateModalOpen = ref(false);
+const viewMode = ref<"grid" | "table">("grid");
 
 // ✅ do NOT top-level await (it blocks SSR render)
 const { status, error, execute } = useAsyncData(
