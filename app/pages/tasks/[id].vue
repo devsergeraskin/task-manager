@@ -49,56 +49,69 @@
         <div class="p-8">
           <div class="flex justify-between items-start mb-6">
             <span class="text-sm font-mono text-gray-400">#{{ task.id }}</span>
-            <div class="flex items-center gap-2">
-              <span
-                :class="[
-                  'px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide flex items-center gap-1.5',
-                  statusClasses,
-                ]"
+            <span
+              :class="[
+                'px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide flex items-center gap-1.5',
+                statusClasses,
+              ]"
+            >
+              <Icon :icon="statusIcon" width="14" height="14" />
+              {{ task.status.replace("-", " ") }}
+            </span>
+          </div>
+
+          <div v-if="isEditing" class="mb-6 space-y-4">
+            <div>
+              <label
+                for="title"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Title</label
               >
-                <Icon :icon="statusIcon" width="14" height="14" />
-                {{ task.status.replace("-", " ") }}
-              </span>
-              <TaskStatusDropdown
-                :current-status="task.status"
-                :task-id="task.id"
-                @update="handleStatusUpdate"
-                @click.prevent
+              <input
+                id="title"
+                v-model="editedTitle"
+                type="text"
+                class="w-full text-xl font-bold text-gray-900 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50"
+                placeholder="Enter task title"
+                ref="titleInput"
               />
             </div>
-          </div>
 
-          <div v-if="isEditing" class="mb-6">
-            <label for="title" class="sr-only">Task Title</label>
-            <input
-              id="title"
-              v-model="editedTitle"
-              type="text"
-              class="w-full text-3xl font-bold text-gray-900 border-b-2 border-indigo-500 py-2 focus:outline-none focus:border-indigo-600 bg-transparent"
-              placeholder="Enter task title"
-              @keyup.enter="saveTask"
-              @keyup.esc="cancelEditing"
-              ref="titleInput"
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Status</label
+            >
+            <TaskStatusDropdown
+              :current-status="editedStatus"
+              :show-label="true"
+              @update="(s) => (editedStatus = s)"
             />
-          </div>
-          <h1 v-else class="text-3xl font-bold text-gray-900 mb-6">
-            {{ task.title }}
-          </h1>
 
-          <div v-if="isEditing">
-            <label for="description" class="sr-only">Description</label>
-            <textarea
-              id="description"
-              v-model="editedDescription"
-              rows="4"
-              class="w-full text-base text-gray-600 border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50"
-              placeholder="Add a detailed description..."
-            ></textarea>
+            <div>
+              <label
+                for="description"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Description</label
+              >
+              <textarea
+                id="description"
+                v-model="editedDescription"
+                rows="4"
+                class="w-full text-base text-gray-600 border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50"
+                placeholder="Add a detailed description..."
+              ></textarea>
+            </div>
           </div>
-          <div v-else class="prose prose-indigo max-w-none text-gray-600">
-            <p v-if="task.description">{{ task.description }}</p>
-            <p v-else class="text-gray-400 italic">No description provided.</p>
-          </div>
+          <template v-else>
+            <h1 class="text-3xl font-bold text-gray-900 mb-6">
+              {{ task.title }}
+            </h1>
+            <div class="prose prose-indigo max-w-none text-gray-600">
+              <p v-if="task.description">{{ task.description }}</p>
+              <p v-else class="text-gray-400 italic">
+                No description provided.
+              </p>
+            </div>
+          </template>
         </div>
 
         <div
@@ -160,6 +173,7 @@ const {
 const isEditing = ref(false);
 const editedTitle = ref("");
 const editedDescription = ref("");
+const editedStatus = ref<TaskStatus>("todo");
 const isSaving = ref(false);
 const titleInput = ref<HTMLInputElement | null>(null);
 
@@ -167,6 +181,7 @@ const startEditing = () => {
   if (task.value) {
     editedTitle.value = task.value.title;
     editedDescription.value = task.value.description || "";
+    editedStatus.value = task.value.status;
     isEditing.value = true;
     nextTick(() => {
       titleInput.value?.focus();
@@ -188,6 +203,7 @@ const saveTask = async () => {
     await store.updateTask(taskId, {
       title: editedTitle.value,
       description: editedDescription.value,
+      status: editedStatus.value,
     });
     await refresh();
     isEditing.value = false;
@@ -196,16 +212,6 @@ const saveTask = async () => {
     alert("Failed to save changes. Please try again.");
   } finally {
     isSaving.value = false;
-  }
-};
-
-const handleStatusUpdate = async (status: TaskStatus) => {
-  try {
-    await store.updateTask(taskId, { status });
-    await refresh();
-  } catch (error) {
-    console.error("Failed to update status", error);
-    alert("Failed to update status");
   }
 };
 
