@@ -1,31 +1,37 @@
-import { getRouterParam, readBody, createError } from 'h3';
-import { TaskStatus, updateTask } from '../../utils/tasks-store';
+import { getRouterParam, readBody, createError } from "h3";
+import { TaskStatus, updateTask } from "../../utils/tasks-store";
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export default defineEventHandler(async (event) => {
-  const idParam = getRouterParam(event, 'id');
+  const idParam = getRouterParam(event, "id");
   const id = Number(idParam);
 
   if (Number.isNaN(id)) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Invalid task id',
+      statusMessage: "Invalid task id",
     });
   }
 
   const body = await readBody<{
     title?: string;
+    description?: string;
     status?: TaskStatus;
   }>(event);
 
-  const patch: { title?: string; status?: TaskStatus } = {};
+  const patch: { title?: string; description?: string; status?: TaskStatus } =
+    {};
 
-  if (typeof body.title === 'string') {
+  if (typeof body.title === "string") {
     patch.title = body.title;
   }
 
-  if (body.status && ['todo', 'in-progress', 'done'].includes(body.status)) {
+  if (typeof body.description === "string") {
+    patch.description = body.description;
+  }
+
+  if (body.status && ["todo", "in-progress", "done"].includes(body.status)) {
     patch.status = body.status;
   }
 
@@ -34,7 +40,7 @@ export default defineEventHandler(async (event) => {
   if (!updated) {
     throw createError({
       statusCode: 404,
-      statusMessage: 'Task not found',
+      statusMessage: "Task not found",
     });
   }
 

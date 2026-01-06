@@ -1,10 +1,12 @@
 import { defineStore } from "pinia";
+import { type TaskStatus } from "~/utils/task-constants";
 
-export type TaskStatus = "todo" | "in-progress" | "done";
+export { type TaskStatus };
 
 export interface Task {
   id: number;
   title: string;
+  description?: string;
   status: TaskStatus;
 }
 

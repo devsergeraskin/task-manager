@@ -1,33 +1,60 @@
 <template>
   <div
-    class="p-4 bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow"
+    class="p-4 bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow group"
   >
-    <div class="flex justify-between items-start">
-      <h3 class="font-medium text-lg text-gray-900">{{ task.title }}</h3>
-      <span
-        :class="statusClasses"
-        class="px-2 py-1 text-xs font-semibold rounded-full capitalize"
+    <div class="flex justify-between items-start mb-3">
+      <h3
+        class="font-bold text-lg text-gray-900 group-hover:text-indigo-600 transition-colors flex-1 mr-2"
       >
-        {{ formattedStatus }}
-      </span>
+        {{ task.title }}
+      </h3>
+      <div class="flex items-center gap-2">
+        <span
+          :class="statusClasses"
+          class="px-2.5 py-0.5 text-xs font-bold rounded-full capitalize"
+        >
+          {{ formattedStatus }}
+        </span>
+        <TaskStatusDropdown
+          :current-status="task.status"
+          :task-id="task.id"
+          @update="handleStatusUpdate"
+          @click.prevent
+        />
+      </div>
     </div>
-    <div class="mt-4 flex justify-end">
+    <div class="mt-2 flex justify-end">
       <NuxtLink
         :to="`/tasks/${task.id}`"
-        class="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
+        class="text-sm text-indigo-600 hover:text-indigo-800 font-medium flex items-center gap-1 group/link"
       >
-        View Details &rarr;
+        View Details
+        <span class="group-hover/link:translate-x-0.5 transition-transform"
+          >&rarr;</span
+        >
       </NuxtLink>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { Task } from "~/stores/tasks";
+import type { Task, TaskStatus } from "~/stores/tasks";
+import { useTasksStore } from "~/stores/tasks";
 
 const props = defineProps<{
   task: Task;
 }>();
+
+const store = useTasksStore();
+
+const handleStatusUpdate = async (status: TaskStatus) => {
+  try {
+    await store.updateTask(props.task.id, { status });
+  } catch (error) {
+    console.error("Failed to update status", error);
+    alert("Failed to update status");
+  }
+};
 
 const formattedStatus = computed(() => {
   return props.task.status.replace("-", " ");

@@ -1,11 +1,13 @@
 import { promises as fs } from "node:fs";
 import { join } from "node:path";
+import { type TaskStatus } from "../../app/utils/task-constants";
 
-export type TaskStatus = "todo" | "in-progress" | "done";
+export { type TaskStatus };
 
 export type Task = {
   id: number;
   title: string;
+  description?: string;
   status: TaskStatus;
 };
 
@@ -48,7 +50,7 @@ export async function getTaskById(id: number): Promise<Task | undefined> {
 
 export async function updateTask(
   id: number,
-  patch: Partial<Pick<Task, "title" | "status">>
+  patch: Partial<Pick<Task, "title" | "status" | "description">>
 ): Promise<Task | undefined> {
   const tasks = await readTasks();
   const index = tasks.findIndex((t) => t.id === id);

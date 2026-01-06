@@ -49,15 +49,23 @@
         <div class="p-8">
           <div class="flex justify-between items-start mb-6">
             <span class="text-sm font-mono text-gray-400">#{{ task.id }}</span>
-            <span
-              :class="[
-                'px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide flex items-center gap-1.5',
-                statusClasses,
-              ]"
-            >
-              <Icon :icon="statusIcon" width="14" height="14" />
-              {{ task.status.replace("-", " ") }}
-            </span>
+            <div class="flex items-center gap-2">
+              <span
+                :class="[
+                  'px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide flex items-center gap-1.5',
+                  statusClasses,
+                ]"
+              >
+                <Icon :icon="statusIcon" width="14" height="14" />
+                {{ task.status.replace("-", " ") }}
+              </span>
+              <TaskStatusDropdown
+                :current-status="task.status"
+                :task-id="task.id"
+                @update="handleStatusUpdate"
+                @click.prevent
+              />
+            </div>
           </div>
 
           <div v-if="isEditing" class="mb-6">
@@ -77,12 +85,19 @@
             {{ task.title }}
           </h1>
 
-          <div class="prose prose-indigo max-w-none text-gray-600">
-            <p>
-              This is a placeholder description for the task. In a real
-              application, this would contain detailed requirements and
-              acceptance criteria.
-            </p>
+          <div v-if="isEditing">
+            <label for="description" class="sr-only">Description</label>
+            <textarea
+              id="description"
+              v-model="editedDescription"
+              rows="4"
+              class="w-full text-base text-gray-600 border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50"
+              placeholder="Add a detailed description..."
+            ></textarea>
+          </div>
+          <div v-else class="prose prose-indigo max-w-none text-gray-600">
+            <p v-if="task.description">{{ task.description }}</p>
+            <p v-else class="text-gray-400 italic">No description provided.</p>
           </div>
         </div>
 
@@ -122,7 +137,7 @@
 </template>
 
 <script setup lang="ts">
-import { useTasksStore } from "~/stores/tasks";
+import { useTasksStore, type TaskStatus } from "~/stores/tasks";
 import { Icon } from "@iconify/vue";
 import { nextTick } from "vue";
 
@@ -144,12 +159,14 @@ const {
 
 const isEditing = ref(false);
 const editedTitle = ref("");
+const editedDescription = ref("");
 const isSaving = ref(false);
 const titleInput = ref<HTMLInputElement | null>(null);
 
 const startEditing = () => {
   if (task.value) {
     editedTitle.value = task.value.title;
+    editedDescription.value = task.value.description || "";
     isEditing.value = true;
     nextTick(() => {
       titleInput.value?.focus();
@@ -160,6 +177,7 @@ const startEditing = () => {
 const cancelEditing = () => {
   isEditing.value = false;
   editedTitle.value = "";
+  editedDescription.value = "";
 };
 
 const saveTask = async () => {
@@ -167,7 +185,10 @@ const saveTask = async () => {
 
   isSaving.value = true;
   try {
-    await store.updateTask(taskId, { title: editedTitle.value });
+    await store.updateTask(taskId, {
+      title: editedTitle.value,
+      description: editedDescription.value,
+    });
     await refresh();
     isEditing.value = false;
   } catch (err) {
@@ -175,6 +196,16 @@ const saveTask = async () => {
     alert("Failed to save changes. Please try again.");
   } finally {
     isSaving.value = false;
+  }
+};
+
+const handleStatusUpdate = async (status: TaskStatus) => {
+  try {
+    await store.updateTask(taskId, { status });
+    await refresh();
+  } catch (error) {
+    console.error("Failed to update status", error);
+    alert("Failed to update status");
   }
 };
 
