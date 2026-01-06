@@ -61,3 +61,14 @@ export async function updateTask(
   await writeTasks(tasks);
   return updated;
 }
+
+export async function createTask(
+  payload: Pick<Task, "title" | "description" | "status">
+): Promise<Task> {
+  const tasks = await readTasks();
+  const nextId = tasks.length > 0 ? Math.max(...tasks.map((t) => t.id)) + 1 : 1;
+  const newTask: Task = { id: nextId, ...payload };
+  tasks.push(newTask);
+  await writeTasks(tasks);
+  return newTask;
+}

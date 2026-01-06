@@ -20,14 +20,14 @@
             </div>
           </div>
 
-          <!-- optional: quick action (remove if you don't have create flow) -->
-          <NuxtLink
-            to="/tasks/new"
+          <!-- Quick action: Open Modal -->
+          <button
+            @click="isCreateModalOpen = true"
             class="hidden sm:inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
           >
             <Icon icon="ph:plus" width="18" height="18" />
             New Task
-          </NuxtLink>
+          </button>
         </header>
 
         <!-- Filters (segmented control) -->
@@ -156,7 +156,11 @@
         </div>
 
         <!-- Content -->
-        <div v-else>
+        <div
+          class="overflow-y-auto"
+          style="max-height: calc(100vh - 400px)"
+          v-else
+        >
           <div
             v-if="store.filteredTasks.length > 0"
             class="grid gap-4 md:grid-cols-2"
@@ -188,17 +192,24 @@
               </p>
             </div>
 
-            <NuxtLink
-              to="/tasks/new"
+            <button
+              @click="isCreateModalOpen = true"
               class="mt-2 inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
             >
               <Icon icon="ph:plus" width="18" height="18" />
               New Task
-            </NuxtLink>
+            </button>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Create Task Modal -->
+    <TaskModal
+      :is-open="isCreateModalOpen"
+      @close="isCreateModalOpen = false"
+      @created="refreshList"
+    />
   </div>
 </template>
 
@@ -208,6 +219,7 @@ import { useTasksStore } from "~/stores/tasks";
 import { Icon } from "@iconify/vue";
 
 const store = useTasksStore();
+const isCreateModalOpen = ref(false);
 
 // ✅ do NOT top-level await (it blocks SSR render)
 const { status, error, execute } = useAsyncData(
@@ -223,6 +235,12 @@ const { status, error, execute } = useAsyncData(
 onMounted(() => {
   execute();
 });
+
+const refreshList = async () => {
+  // Wait for store update (which is synchronous on client usually) but re-sorting/filtering might happen
+  // store list is already updated by createTask action pushing to array.
+  // Just ensuring reactivity triggers layout updates if needed.
+};
 
 /**
  * Segmented-control styles
@@ -241,7 +259,6 @@ const pill = (active: boolean) =>
 
 /**
  * Counts (nice UX, cheap compute)
- * If your store has tasks list name differently, adjust store.tasks
  */
 const counts = computed(() => {
   const all = store.tasks?.length ?? 0;

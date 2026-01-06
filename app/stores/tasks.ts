@@ -61,12 +61,22 @@ export const useTasksStore = defineStore("tasks", () => {
     statusFilter.value = status;
   };
 
+  const createTask = async (task: Partial<Task>) => {
+    const created = await $fetch<Task>("/api/tasks", {
+      method: "POST",
+      body: task,
+    });
+    tasks.value.push(created);
+    return created;
+  };
+
   return {
     tasks,
     statusFilter,
     fetchTasks,
     fetchTaskById,
     updateTask,
+    createTask,
     filteredTasks,
     setFilter,
   };
