@@ -86,12 +86,6 @@
                 </div>
 
                 <!-- quick status label (optional) -->
-                <span
-                  class="hidden sm:inline-flex shrink-0 rounded-full px-2 py-1 text-[11px] font-semibold ring-1 ring-inset min-w-[80px] justify-center"
-                  :class="statusPillClasses(task.status)"
-                >
-                  {{ task.status.replace("-", " ") }}
-                </span>
               </div>
             </td>
 
@@ -100,9 +94,26 @@
                 <TaskStatusDropdown
                   :current-status="task.status"
                   :task-id="task.id"
-                  :show-label="true"
                   @update="(s) => handleStatusUpdate(task.id, s)"
-                />
+                >
+                  <div
+                    class="flex items-center gap-1 group cursor-pointer"
+                    title="Click to change status"
+                  >
+                    <span
+                      :class="statusPillClasses(task.status)"
+                      class="min-w-[100px] justify-between inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold capitalize ring-1 ring-inset transition-all hover:bg-opacity-80 pr-2"
+                    >
+                      {{ task.status.replace("-", " ") }}
+                      <Icon
+                        icon="ph:caret-down-bold"
+                        class="opacity-50"
+                        width="12"
+                        height="12"
+                      />
+                    </span>
+                  </div>
+                </TaskStatusDropdown>
               </div>
             </td>
 

@@ -1,8 +1,13 @@
 <template>
   <div class="relative" ref="dropdownRef">
+    <!-- Custom Trigger -->
+    <div v-if="$slots.default" @click="isOpen = !isOpen" class="cursor-pointer">
+      <slot />
+    </div>
+
     <!-- Icon/Compact Mode -->
     <button
-      v-if="!showLabel"
+      v-else-if="!showLabel"
       @click="isOpen = !isOpen"
       :class="[
         'w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors',

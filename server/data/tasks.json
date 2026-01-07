@@ -3,7 +3,7 @@
     "id": 1,
     "title": "Design landing page",
     "description": "Create initial UI for the marketing landing page.",
-    "status": "todo"
+    "status": "done"
   },
   {
     "id": 2,
@@ -33,24 +33,24 @@
     "id": 6,
     "title": "Write unit tests",
     "description": "Cover core business logic with unit tests.!",
-    "status": "in-progress"
+    "status": "todo"
   },
   {
     "id": 7,
     "title": "Optimize API performance",
     "description": "Reduce response time for task endpoints. !!!",
-    "status": "in-progress"
+    "status": "done"
   },
   {
     "id": 8,
     "title": "Update README !",
     "description": "Add setup and usage instructions.",
-    "status": "todo"
+    "status": "in-progress"
   },
   {
     "id": 9,
     "title": "Deploy to staging !!!",
-    "description": "Push latest build to the staging environment. !!!! !!!!",
+    "description": "Push latest build to the staging environment. !!!! !!!! Push latest build to the staging environment. !!!! !!!!Push latest build to the staging environment. !!!! !!!!Push latest build to the staging environment. !!!! !!!!Push latest build to the staging environment. !!!! !!!!",
     "status": "todo"
   },
   {

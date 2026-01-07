@@ -17,16 +17,36 @@
               {{ task.title }}
             </h3>
           </div>
+          <p class="mt-1 text-xs sm:text-sm text-gray-500 truncate w-70">
+            <span class="capitalize">{{ task.description }}</span>
+          </p>
         </div>
 
         <!-- Right side: badge + dropdown -->
         <div class="flex items-center gap-2">
-          <span
-            :class="statusClasses"
-            class="min-w-[80px] justify-center inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold capitalize ring-1 ring-inset"
+          <TaskStatusDropdown
+            :current-status="task.status"
+            :task-id="task.id"
+            @update="handleStatusUpdate"
           >
-            {{ formattedStatus }}
-          </span>
+            <div
+              class="flex items-center gap-1 group cursor-pointer"
+              title="Click to change status"
+            >
+              <span
+                :class="statusClasses"
+                class="min-w-[100px] justify-between inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold capitalize ring-1 ring-inset transition-all hover:bg-opacity-80 pr-2"
+              >
+                {{ formattedStatus }}
+                <Icon
+                  icon="ph:caret-down-bold"
+                  class="opacity-50"
+                  width="12"
+                  height="12"
+                />
+              </span>
+            </div>
+          </TaskStatusDropdown>
         </div>
       </div>
 
@@ -40,12 +60,6 @@
         </span>
 
         <div class="flex items-center">
-          <TaskStatusDropdown
-            :current-status="task.status"
-            :task-id="task.id"
-            @update="handleStatusUpdate"
-            @click.prevent
-          />
           <button
             @click.stop="handleDelete"
             class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
