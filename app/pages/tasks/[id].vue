@@ -141,8 +141,9 @@ const handleSave = async (updatedTask: {
 }) => {
   isSaving.value = true;
   try {
-    await store.updateTask(taskId, updatedTask);
-    await refresh();
+    const updated = await store.updateTask(taskId, updatedTask);
+    task.value = updated;
+    // console.log(updated);
     isEditing.value = false;
   } catch (err) {
     console.error("Failed to save task:", err);
