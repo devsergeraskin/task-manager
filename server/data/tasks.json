@@ -1,68 +1,62 @@
 [
   {
     "id": 1,
-    "title": "1111",
-    "description": "xxxx",
-    "status": "in-progress"
+    "title": "Design landing page",
+    "description": "Create initial UI for the marketing landing page.",
+    "status": "todo"
   },
   {
     "id": 2,
-    "title": "Fix login bug",
-    "description": "Investigate why login fails on Safari.",
-    "status": "done"
+    "title": "Implement authentication",
+    "description": "Add email and password authentication flow.",
+    "status": "in-progress"
   },
   {
     "id": 3,
-    "title": "Write API docs",
-    "description": "Document all the endpoints using Swagger.",
+    "title": "Set up database schema",
+    "description": "Create tables for users, tasks, and activity logs.",
     "status": "done"
   },
   {
     "id": 4,
-    "title": "3434343",
-    "description": "xxxx",
+    "title": "Fix mobile layout issues",
+    "description": "Resolve overflow problems on small screens.",
     "status": "todo"
   },
   {
     "id": 5,
-    "title": "3434343",
-    "description": "xxxx",
-    "status": "todo"
+    "title": "Add task filtering",
+    "description": "Allow filtering tasks by status.",
+    "status": "in-progress"
   },
   {
     "id": 6,
-    "title": "3434343",
-    "description": "xxxx",
-    "status": "todo"
+    "title": "Write unit tests",
+    "description": "Cover core business logic with unit tests.",
+    "status": "in-progress"
   },
   {
     "id": 7,
-    "title": "3434343",
-    "description": "xxxx",
-    "status": "todo"
+    "title": "Optimize API performance",
+    "description": "Reduce response time for task endpoints.",
+    "status": "in-progress"
   },
   {
     "id": 8,
-    "title": "3434343",
-    "description": "xxxx",
-    "status": "todo"
+    "title": "Update README",
+    "description": "Add setup and usage instructions.",
+    "status": "done"
   },
   {
     "id": 9,
-    "title": "3434343",
-    "description": "xxxx",
-    "status": "todo"
+    "title": "Deploy to staging",
+    "description": "Push latest build to the staging environment.",
+    "status": "in-progress"
   },
   {
     "id": 10,
-    "title": "3434343",
-    "description": "xxxx",
-    "status": "todo"
-  },
-  {
-    "id": 11,
-    "title": "vvvv",
-    "description": "",
-    "status": "todo"
+    "title": "Final test ",
+    "description": "Final Test DONE",
+    "status": "done"
   }
 ]

@@ -4,7 +4,7 @@
     <AppHeader />
 
     <!-- Main content area scrolls independently -->
-    <main class="flex-1 overflow-y-auto">
+    <main class="flex-1">
       <slot />
     </main>
   </div>

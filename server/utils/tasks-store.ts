@@ -72,3 +72,13 @@ export async function createTask(
   await writeTasks(tasks);
   return newTask;
 }
+
+export async function deleteTask(id: number): Promise<boolean> {
+  const tasks = await readTasks();
+  const index = tasks.findIndex((t) => t.id === id);
+  if (index === -1) return false;
+
+  tasks.splice(index, 1);
+  await writeTasks(tasks);
+  return true;
+}

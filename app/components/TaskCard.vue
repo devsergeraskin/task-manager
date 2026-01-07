@@ -1,9 +1,9 @@
 <template>
   <article
-    class="relative rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:shadow-md focus-within:ring-2 focus-within:ring-indigo-500/40"
+    class="border relative rounded-2xl bg-white shadow-sm transition hover:shadow-md focus-within:ring-2 focus-within:ring-indigo-500/40"
   >
     <!-- top accent by status -->
-    <div :class="accentClasses" class="h-1 w-full rounded-t-2xl" />
+    <!-- <div :class="accentClasses" class="h-1 w-full rounded-t-2xl" /> -->
 
     <div class="p-4 sm:p-5">
       <!-- Header -->
@@ -16,17 +16,7 @@
             >
               {{ task.title }}
             </h3>
-
-            <span
-              :class="dotClasses"
-              class="mt-2 inline-block h-2 w-2 shrink-0 rounded-full"
-              aria-hidden="true"
-            />
           </div>
-
-          <p class="mt-1 text-xs sm:text-sm text-gray-500">
-            Task • <span class="capitalize">{{ formattedStatus }}</span>
-          </p>
         </div>
 
         <!-- Right side: badge + dropdown -->
@@ -38,13 +28,6 @@
             <span :class="dotClasses" class="h-1.5 w-1.5 rounded-full" />
             {{ formattedStatus }}
           </span>
-
-          <TaskStatusDropdown
-            :current-status="task.status"
-            :task-id="task.id"
-            @update="handleStatusUpdate"
-            @click.prevent
-          />
         </div>
       </div>
 
@@ -57,14 +40,29 @@
           {{ statusLabel }}
         </span>
 
-        <!-- ✅ only this opens the task -->
-        <NuxtLink
-          :to="`/tasks/${task.id}`"
-          class="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 active:bg-indigo-800 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
-        >
-          View details
-          <span class="text-white/90" aria-hidden="true">→</span>
-        </NuxtLink>
+        <div class="flex items-center">
+          <TaskStatusDropdown
+            :current-status="task.status"
+            :task-id="task.id"
+            @update="handleStatusUpdate"
+            @click.prevent
+          />
+          <button
+            @click.stop="handleDelete"
+            class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+            title="Delete task"
+          >
+            <Icon icon="ph:trash" width="18" height="18" color="red" />
+          </button>
+
+          <NuxtLink
+            :to="`/tasks/${task.id}`"
+            class="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 active:bg-indigo-800 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
+          >
+            View
+            <span class="text-white/90" aria-hidden="true">→</span>
+          </NuxtLink>
+        </div>
       </div>
     </div>
   </article>
@@ -73,10 +71,21 @@
 <script setup lang="ts">
 import type { Task, TaskStatus } from "~/stores/tasks";
 import { useTasksStore } from "~/stores/tasks";
+import { Icon } from "@iconify/vue";
 
 const props = defineProps<{ task: Task }>();
 
 const store = useTasksStore();
+
+const handleDelete = async () => {
+  if (!confirm("Are you sure you want to delete this task?")) return;
+  try {
+    await store.deleteTask(props.task.id);
+  } catch (error) {
+    console.error("Failed to delete task", error);
+    alert("Failed to delete task");
+  }
+};
 
 const handleStatusUpdate = async (status: TaskStatus) => {
   try {
@@ -125,19 +134,6 @@ const dotClasses = computed(() => {
       return "bg-gray-400";
     default:
       return "bg-gray-400";
-  }
-});
-
-const accentClasses = computed(() => {
-  switch (props.task.status) {
-    case "done":
-      return "bg-emerald-500/70";
-    case "in-progress":
-      return "bg-blue-500/70";
-    case "todo":
-      return "bg-gray-300";
-    default:
-      return "bg-gray-300";
   }
 });
 </script>

@@ -143,17 +143,10 @@
             class="mt-3 flex items-center justify-between text-sm text-gray-600"
           >
             <p>
-              Showing
               <span class="font-semibold text-gray-900">{{
                 store.filteredTasks.length
               }}</span>
               tasks
-              <span class="text-gray-400">•</span>
-              <span class="capitalize">{{
-                store.statusFilter
-                  ? store.statusFilter.replace("-", " ")
-                  : "all"
-              }}</span>
             </p>
 
             <NuxtLink

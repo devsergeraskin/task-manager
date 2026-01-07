@@ -20,7 +20,7 @@ export const useTasksStore = defineStore("tasks", () => {
 
     try {
       const data = await $fetch<Task[]>("/api/tasks");
-      tasks.value = data;
+      tasks.value = data.sort((a, b) => b.id - a.id);
       return data;
     } catch (err) {
       console.error("Failed to fetch tasks:", err);
@@ -66,8 +66,16 @@ export const useTasksStore = defineStore("tasks", () => {
       method: "POST",
       body: task,
     });
-    tasks.value.push(created);
+    tasks.value.unshift(created);
     return created;
+  };
+
+  const deleteTask = async (id: number) => {
+    await $fetch(`/api/tasks/${id}`, { method: "DELETE" });
+    const index = tasks.value.findIndex((t) => t.id === id);
+    if (index !== -1) {
+      tasks.value.splice(index, 1);
+    }
   };
 
   return {
@@ -77,6 +85,7 @@ export const useTasksStore = defineStore("tasks", () => {
     fetchTaskById,
     updateTask,
     createTask,
+    deleteTask,
     filteredTasks,
     setFilter,
   };

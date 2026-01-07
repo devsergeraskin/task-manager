@@ -109,13 +109,23 @@
             <td
               class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium sm:px-6"
             >
-              <NuxtLink
-                :to="`/tasks/${task.id}`"
-                class="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
-              >
-                View
-                <Icon icon="ph:arrow-right" />
-              </NuxtLink>
+              <div class="flex items-center justify-end gap-2">
+                <button
+                  @click="handleDelete(task.id)"
+                  class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                  title="Delete task"
+                >
+                  <Icon icon="ph:trash" width="18" height="18" color="red" />
+                </button>
+
+                <NuxtLink
+                  :to="`/tasks/${task.id}`"
+                  class="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 active:bg-indigo-800 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
+                >
+                  View
+                  <span class="text-white/90" aria-hidden="true">→</span>
+                </NuxtLink>
+              </div>
             </td>
           </tr>
 
@@ -157,6 +167,16 @@ import { useTasksStore } from "~/stores/tasks";
 const props = defineProps<{ tasks: Task[] }>();
 
 const store = useTasksStore();
+
+const handleDelete = async (id: number) => {
+  if (!confirm("Are you sure you want to delete this task?")) return;
+  try {
+    await store.deleteTask(id);
+  } catch (error) {
+    console.error("Failed to delete task", error);
+    alert("Failed to delete task");
+  }
+};
 
 const handleStatusUpdate = async (id: number, status: TaskStatus) => {
   try {
