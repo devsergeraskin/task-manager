@@ -87,7 +87,7 @@
 
                 <!-- quick status label (optional) -->
                 <span
-                  class="hidden sm:inline-flex shrink-0 rounded-full px-2 py-1 text-[11px] font-semibold ring-1 ring-inset"
+                  class="hidden sm:inline-flex shrink-0 rounded-full px-2 py-1 text-[11px] font-semibold ring-1 ring-inset min-w-[80px] justify-center"
                   :class="statusPillClasses(task.status)"
                 >
                   {{ task.status.replace("-", " ") }}

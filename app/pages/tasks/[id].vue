@@ -45,8 +45,18 @@
       <!-- Content -->
       <div
         v-else-if="task"
-        class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden"
+        class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden relative"
       >
+        <!-- Save Loading Overlay -->
+        <div
+          v-if="isSaving"
+          class="absolute inset-0 bg-white/60 backdrop-blur-[1px] z-50 flex flex-col items-center justify-center animate-in fade-in duration-200"
+        >
+          <LoadingSpinner class="scale-125 mb-3" />
+          <span class="text-sm font-semibold text-gray-500 animate-pulse"
+            >Saving changes...</span
+          >
+        </div>
         <!-- Top accent -->
         <div :class="accentClasses" class="h-1 w-full" />
 
@@ -130,7 +140,7 @@ const {
   refresh,
 } = await useAsyncData(`task-${taskId}`, () => store.fetchTaskById(taskId));
 
-const isEditing = ref(false);
+const isEditing = ref(true);
 const isSaving = ref(false);
 
 const handleSave = async (updatedTask: {
@@ -140,7 +150,12 @@ const handleSave = async (updatedTask: {
 }) => {
   isSaving.value = true;
   try {
-    const updated = await store.updateTask(taskId, updatedTask);
+    // const minDelay = new Promise(resolve => setTimeout(resolve, 500));
+    const [updated] = await Promise.all([
+      store.updateTask(taskId, updatedTask),
+      // minDelay
+    ]);
+
     task.value = updated;
     // console.log(updated);
     isEditing.value = false;

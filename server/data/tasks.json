@@ -3,13 +3,13 @@
     "id": 1,
     "title": "Design landing page",
     "description": "Create initial UI for the marketing landing page.",
-    "status": "in-progress"
+    "status": "todo"
   },
   {
     "id": 2,
     "title": "Implement authentication",
     "description": "Add email and password authentication flow.",
-    "status": "todo"
+    "status": "in-progress"
   },
   {
     "id": 3,
@@ -27,19 +27,19 @@
     "id": 5,
     "title": "Add task filtering",
     "description": "Allow filtering tasks by status.",
-    "status": "todo"
+    "status": "in-progress"
   },
   {
     "id": 6,
     "title": "Write unit tests",
-    "description": "Cover core business logic with unit tests.",
-    "status": "done"
+    "description": "Cover core business logic with unit tests.!",
+    "status": "in-progress"
   },
   {
     "id": 7,
     "title": "Optimize API performance",
     "description": "Reduce response time for task endpoints. !!!",
-    "status": "todo"
+    "status": "in-progress"
   },
   {
     "id": 8,
@@ -51,12 +51,12 @@
     "id": 9,
     "title": "Deploy to staging !!!",
     "description": "Push latest build to the staging environment. !!!! !!!!",
-    "status": "in-progress"
+    "status": "todo"
   },
   {
     "id": 10,
     "title": "Final test ",
     "description": "Final Test DONE",
-    "status": "in-progress"
+    "status": "todo"
   }
 ]
