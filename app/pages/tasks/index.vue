@@ -137,27 +137,6 @@
               </span>
             </button>
           </div>
-
-          <!-- subtle helper row -->
-          <div
-            class="mt-3 flex items-center justify-between text-sm text-gray-600"
-          >
-            <p>
-              <span class="font-semibold text-gray-900">{{
-                store.filteredTasks.length
-              }}</span>
-              tasks
-            </p>
-
-            <NuxtLink
-              v-if="store.statusFilter"
-              to="/tasks"
-              @click.prevent="store.setFilter(null)"
-              class="text-indigo-600 hover:text-indigo-700 font-medium"
-            >
-              Clear filter
-            </NuxtLink>
-          </div>
         </div>
 
         <!-- Loading -->

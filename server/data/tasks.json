@@ -9,7 +9,7 @@
     "id": 2,
     "title": "Implement authentication",
     "description": "Add email and password authentication flow.",
-    "status": "in-progress"
+    "status": "done"
   },
   {
     "id": 3,
@@ -21,7 +21,7 @@
     "id": 4,
     "title": "Fix mobile layout issues",
     "description": "Resolve overflow problems on small screens.",
-    "status": "in-progress"
+    "status": "todo"
   },
   {
     "id": 5,
@@ -39,24 +39,18 @@
     "id": 7,
     "title": "Optimize API performance",
     "description": "Reduce response time for task endpoints. !!!",
-    "status": "done"
+    "status": "todo"
   },
   {
     "id": 8,
     "title": "Update README !",
     "description": "Add setup and usage instructions.",
-    "status": "in-progress"
+    "status": "todo"
   },
   {
     "id": 9,
     "title": "Deploy to staging !!!",
     "description": "Push latest build to the staging environment. !!!! !!!! Push latest build to the staging environment. !!!! !!!!Push latest build to the staging environment. !!!! !!!!Push latest build to the staging environment. !!!! !!!!Push latest build to the staging environment. !!!! !!!!",
-    "status": "todo"
-  },
-  {
-    "id": 10,
-    "title": "Final test ",
-    "description": "Final Test DONE",
-    "status": "todo"
+    "status": "in-progress"
   }
 ]
