@@ -62,7 +62,6 @@
               :class="statusClasses"
               class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ring-1 ring-inset"
             >
-              <span :class="dotClasses" class="h-1.5 w-1.5 rounded-full" />
               <Icon :icon="statusIcon" width="14" height="14" />
               {{ task.status.replace("-", " ") }}
             </span>
@@ -165,20 +164,6 @@ const statusClasses = computed(() => {
       return "bg-gray-50 text-gray-700 ring-gray-200";
     default:
       return "bg-gray-50 text-gray-700 ring-gray-200";
-  }
-});
-
-const dotClasses = computed(() => {
-  if (!task.value) return "bg-gray-400";
-  switch (task.value.status) {
-    case "done":
-      return "bg-emerald-500";
-    case "in-progress":
-      return "bg-blue-500";
-    case "todo":
-      return "bg-gray-400";
-    default:
-      return "bg-gray-400";
   }
 });
 

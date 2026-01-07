@@ -96,7 +96,7 @@
             </td>
 
             <td class="px-4 py-4 whitespace-nowrap sm:px-6">
-              <div class="flex items-center gap-2">
+              <div class="items-center gap-2">
                 <TaskStatusDropdown
                   :current-status="task.status"
                   :task-id="task.id"

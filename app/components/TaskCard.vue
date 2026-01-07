@@ -23,9 +23,8 @@
         <div class="flex items-center gap-2">
           <span
             :class="statusClasses"
-            class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold capitalize ring-1 ring-inset"
+            class="min-w-[80px] justify-center inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold capitalize ring-1 ring-inset"
           >
-            <span :class="dotClasses" class="h-1.5 w-1.5 rounded-full" />
             {{ formattedStatus }}
           </span>
         </div>
