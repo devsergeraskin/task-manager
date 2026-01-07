@@ -1,7 +1,7 @@
 <template>
   <div id="app" v-cloak>
     <div class="bg-gray-50 py-8">
-      <div class="container mx-auto px-4 max-w-4xl">
+      <div class="container mx-auto px-4">
         <!-- Header -->
         <header
           class="mb-6 flex flex-col sm:flex-row sm:items-start justify-between gap-4"
