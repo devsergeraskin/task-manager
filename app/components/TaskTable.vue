@@ -27,7 +27,7 @@
               scope="col"
               class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider sm:px-6"
             >
-              ID
+              #ID
             </th>
             <th
               scope="col"
@@ -58,13 +58,13 @@
           >
             <td class="px-4 py-4 whitespace-nowrap sm:px-6">
               <span class="inline-flex items-center gap-2">
-                <span
+                <!-- <span
                   class="h-2 w-2 rounded-full"
                   :class="dotClasses(task.status)"
-                />
-                <span class="text-sm text-gray-500 font-mono"
-                  >#{{ task.id }}</span
-                >
+                /> -->
+                <span class="text-sm text-gray-500 font-mono">{{
+                  task.id
+                }}</span>
               </span>
             </td>
 
